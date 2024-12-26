@@ -68,7 +68,7 @@ export const constantRoutes = [
     children: [
       {
         path: 'index',
-        component: () => import('@/views/index'),
+        component: () => import('@/views/index_v1'),
         name: 'Index',
         meta: { title: '首页', icon: 'dashboard', affix: true }
       }
@@ -92,6 +92,18 @@ export const constantRoutes = [
 
 // 动态路由，基于用户权限动态去加载
 export const dynamicRoutes = [
+  {
+    path: '/lawfirm',
+    component: Layout,
+    hidden: true,
+    permissions: [''],
+    children: [
+      {
+        path: 'lawfirm/',
+        component: () => import('@/views/lawfirm/')
+      }
+    ]
+  },
   {
     path: '/system/user-auth',
     component: Layout,
