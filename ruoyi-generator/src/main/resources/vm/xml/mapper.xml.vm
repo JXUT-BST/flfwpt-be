@@ -85,13 +85,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="$column.javaField != null#if($column.javaType == 'String' && $column.required) and $column.javaField != ''#end">$column.columnName,</if>
 #end
 #end
+            update_time,
+            create_time,
          </trim>
+
         <trim prefix="values (" suffix=")" suffixOverrides=",">
 #foreach($column in $columns)
 #if($column.columnName != $pkColumn.columnName || !$pkColumn.increment)
             <if test="$column.javaField != null#if($column.javaType == 'String' && $column.required) and $column.javaField != ''#end">#{$column.javaField},</if>
 #end
 #end
+            sysdate(),
+            sysdate(),
          </trim>
     </insert>
 
@@ -103,12 +108,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="$column.javaField != null#if($column.javaType == 'String' && $column.required) and $column.javaField != ''#end">$column.columnName = #{$column.javaField},</if>
 #end
 #end
+            update_time = sysdate(),
         </trim>
         where ${pkColumn.columnName} = #{${pkColumn.javaField}}
     </update>
 
     <delete id="delete${ClassName}By${pkColumn.capJavaField}" parameterType="${pkColumn.javaType}">
-        delete from ${tableName} where ${pkColumn.columnName} = #{${pkColumn.javaField}}
+        update ${tableName} set del_flag = '2' where ${pkColumn.columnName} = #{${pkColumn.javaField}}
     </delete>
 
     <delete id="delete${ClassName}By${pkColumn.capJavaField}s" parameterType="String">

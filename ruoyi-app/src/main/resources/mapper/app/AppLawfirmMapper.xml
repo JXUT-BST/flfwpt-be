@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.app.mapper.AppLawfirmMapper">
+    
+    <resultMap type="AppLawfirm" id="AppLawfirmResult">
+        <result property="lawfirmId"    column="lawfirm_id"    />
+        <result property="lawfirmName"    column="lawfirm_name"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="remark"    column="remark"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="introduction"    column="introduction"    />
+        <result property="field"    column="field"    />
+        <result property="businessHours"    column="business_hours"    />
+        <result property="address"    column="address"    />
+    </resultMap>
+
+    <sql id="selectAppLawfirmVo">
+        select lawfirm_id, lawfirm_name, create_by, update_time, create_time, update_by, remark, del_flag, introduction, field, business_hours, address from app_lawfirm
+    </sql>
+
+    <select id="selectAppLawfirmList" parameterType="AppLawfirm" resultMap="AppLawfirmResult">
+        <include refid="selectAppLawfirmVo"/>
+        <where>  
+            <if test="lawfirmName != null  and lawfirmName != ''"> and lawfirm_name like concat('%', #{lawfirmName}, '%')</if>
+            <if test="introduction != null  and introduction != ''"> and introduction = #{introduction}</if>
+            <if test="field != null  and field != ''"> and field = #{field}</if>
+            <if test="businessHours != null  and businessHours != ''"> and business_hours = #{businessHours}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+        </where>
+    </select>
+    
+    <select id="selectAppLawfirmByLawfirmId" parameterType="Long" resultMap="AppLawfirmResult">
+        <include refid="selectAppLawfirmVo"/>
+        where lawfirm_id = #{lawfirmId}
+    </select>
+
+    <insert id="insertAppLawfirm" parameterType="AppLawfirm" useGeneratedKeys="true" keyProperty="lawfirmId">
+        insert into app_lawfirm
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="lawfirmName != null and lawfirmName != ''">lawfirm_name,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="updateBy != null and updateBy != ''">update_by,</if>
+            <if test="remark != null">remark,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="introduction != null">introduction,</if>
+            <if test="field != null">field,</if>
+            <if test="businessHours != null">business_hours,</if>
+            <if test="address != null">address,</if>
+            update_time,
+            create_time,
+         </trim>
+
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="lawfirmName != null and lawfirmName != ''">#{lawfirmName},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="updateBy != null and updateBy != ''">#{updateBy},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="introduction != null">#{introduction},</if>
+            <if test="field != null">#{field},</if>
+            <if test="businessHours != null">#{businessHours},</if>
+            <if test="address != null">#{address},</if>
+            sysdate(),
+            sysdate(),
+         </trim>
+    </insert>
+
+    <update id="updateAppLawfirm" parameterType="AppLawfirm">
+        update app_lawfirm
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="lawfirmName != null and lawfirmName != ''">lawfirm_name = #{lawfirmName},</if>
+            <if test="createBy != null and createBy != ''">create_by = #{createBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="introduction != null">introduction = #{introduction},</if>
+            <if test="field != null">field = #{field},</if>
+            <if test="businessHours != null">business_hours = #{businessHours},</if>
+            <if test="address != null">address = #{address},</if>
+            update_time = sysdate(),
+        </trim>
+        where lawfirm_id = #{lawfirmId}
+    </update>
+
+    <delete id="deleteAppLawfirmByLawfirmId" parameterType="Long">
+        update app_lawfirm set del_flag = '2' where lawfirm_id = #{lawfirmId}
+    </delete>
+
+    <delete id="deleteAppLawfirmByLawfirmIds" parameterType="String">
+        delete from app_lawfirm where lawfirm_id in 
+        <foreach item="lawfirmId" collection="array" open="(" separator="," close=")">
+            #{lawfirmId}
+        </foreach>
+    </delete>
+</mapper>
