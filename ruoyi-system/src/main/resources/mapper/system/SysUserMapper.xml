@@ -141,6 +141,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<select id="checkEmailUnique" parameterType="String" resultMap="SysUserResult">
 		select user_id, email from sys_user where email = #{email} and del_flag = '0' limit 1
 	</select>
+
+	<select id="checkWxOpenIdUnique" parameterType="String" resultMap="SysUserResult">
+		select user_id, wx_open_id from sys_user where wx_open_id = #{wxOpenId} and del_flag = '0' limit 1
+	</select>
 	
 	<insert id="insertUser" parameterType="SysUser" useGeneratedKeys="true" keyProperty="userId">
  		insert into sys_user(
@@ -156,6 +160,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="status != null and status != ''">status,</if>
  			<if test="createBy != null and createBy != ''">create_by,</if>
  			<if test="remark != null and remark != ''">remark,</if>
+ 			<if test="wxOpenId != null and wxOpenId != ''">wx_open_id,</if>
  			create_time
  		)values(
  			<if test="userId != null and userId != ''">#{userId},</if>
@@ -170,6 +175,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="status != null and status != ''">#{status},</if>
  			<if test="createBy != null and createBy != ''">#{createBy},</if>
  			<if test="remark != null and remark != ''">#{remark},</if>
+ 			<if test="wxOpenId != null and wxOpenId != ''">#{wxOpenId},</if>
  			sysdate()
  		)
 	</insert>
