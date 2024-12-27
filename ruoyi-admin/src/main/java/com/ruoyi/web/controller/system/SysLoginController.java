@@ -115,8 +115,8 @@ public class SysLoginController extends BaseController {
         AjaxResult ajaxResult = AjaxResult.success();
         // 第一阶段，获取用户ID
         String url = "https://api.weixin.qq.com/sns/jscode2session";
-        url += "?appid=wx8e6d72c91e6995f5&" +
-                "secret=1101a2e25169aff9525be38d2f9b4244&" +
+        url += "?appid=wx4366e9dd257a50c2&" +
+                "secret=9d802769b90d32843eeb0ed493a66430&" +
                 "js_code=" + wxLoginForm.getCode() +
                 "&grant_type=authorization_code";
         String resp = HttpUtils.sendGet(url);
@@ -126,11 +126,12 @@ public class SysLoginController extends BaseController {
         ajaxResult.put("openId", wxOpenId);
         // 第二阶段，判断是否存在此用户，如不存在则创建新用户，如存在则返回用户信息
         SysUser user = new SysUser();
-        user.setUserName(wxOpenId.substring(0, 6));
+        user.setUserName(wxOpenId);
         user.setNickName("微信用户:" + wxOpenId.substring(0, 6));
         user.setWxOpenId(wxOpenId);
         String password = "qwert12345!@#$%";
         if (!userService.checkWxOpenIdUnique(user)) {
+            user = userService.selectUserByWxOpenId(wxOpenId);
             error("新增微信用户'" + user.getWxOpenId() + "'失败，登录账号已存在");
         } else {
             //
