@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.app.mapper.AppQueryMapper">
+    
+    <resultMap type="AppQuery" id="AppQueryResult">
+        <result property="legalQaId"    column="legal_qa_id"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="remark"    column="remark"    />
+        <result property="wxOpenId"    column="wx_open_id"    />
+        <result property="type"    column="type"    />
+        <result property="content"    column="content"    />
+        <result property="phoneNumber"    column="phone_number"    />
+        <result property="city"    column="city"    />
+    </resultMap>
+
+    <sql id="selectAppQueryVo">
+        select legal_qa_id, create_by, update_by, create_time, update_time, del_flag, remark, wx_open_id, type, content, phone_number, city from app_query
+    </sql>
+
+    <select id="selectAppQueryList" parameterType="AppQuery" resultMap="AppQueryResult">
+        <include refid="selectAppQueryVo"/>
+        <where>  
+            <if test="wxOpenId != null  and wxOpenId != ''"> and wx_open_id = #{wxOpenId}</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="content != null  and content != ''"> and content = #{content}</if>
+            <if test="phoneNumber != null  and phoneNumber != ''"> and phone_number = #{phoneNumber}</if>
+            <if test="city != null  and city != ''"> and city = #{city}</if>
+        </where>
+    </select>
+    
+    <select id="selectAppQueryByLegalQaId" parameterType="Long" resultMap="AppQueryResult">
+        <include refid="selectAppQueryVo"/>
+        where legal_qa_id = #{legalQaId}
+    </select>
+
+    <insert id="insertAppQuery" parameterType="AppQuery" useGeneratedKeys="true" keyProperty="legalQaId">
+        insert into app_query
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="createBy != null">create_by,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="remark != null">remark,</if>
+            <if test="wxOpenId != null">wx_open_id,</if>
+            <if test="type != null">type,</if>
+            <if test="content != null">content,</if>
+            <if test="phoneNumber != null">phone_number,</if>
+            <if test="city != null">city,</if>
+            update_time,
+            create_time,
+         </trim>
+
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="wxOpenId != null">#{wxOpenId},</if>
+            <if test="type != null">#{type},</if>
+            <if test="content != null">#{content},</if>
+            <if test="phoneNumber != null">#{phoneNumber},</if>
+            <if test="city != null">#{city},</if>
+            sysdate(),
+            sysdate(),
+         </trim>
+    </insert>
+
+    <update id="updateAppQuery" parameterType="AppQuery">
+        update app_query
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="wxOpenId != null">wx_open_id = #{wxOpenId},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="content != null">content = #{content},</if>
+            <if test="phoneNumber != null">phone_number = #{phoneNumber},</if>
+            <if test="city != null">city = #{city},</if>
+            update_time = sysdate(),
+        </trim>
+        where legal_qa_id = #{legalQaId}
+    </update>
+
+    <delete id="deleteAppQueryByLegalQaId" parameterType="Long">
+        update app_query set del_flag = '2' where legal_qa_id = #{legalQaId}
+    </delete>
+
+    <delete id="deleteAppQueryByLegalQaIds" parameterType="String">
+        delete from app_query where legal_qa_id in 
+        <foreach item="legalQaId" collection="array" open="(" separator="," close=")">
+            #{legalQaId}
+        </foreach>
+    </delete>
+</mapper>
